@@ -38,7 +38,7 @@ RemoveIPC=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
 IPAccounting=yes
-{% if proxy_url is defined and proxy_url | length > 0 %}
+{% if proxy_url is defined and proxy_url != None and proxy_url | length > 0 %}
 # upstream communication can be limited to proxy to pull models
 # and internal
 IPAddressAllow=localhost link-local multicast 10.0.0.0/8 192.168.0.0/16
