@@ -22,19 +22,10 @@ jobs:
       max-parallel: 4
       matrix:
         include:
-          - molecule_distro: 'rockylinux:9'
-            experimental: false
-            suite: default
           - molecule_distro: 'ubuntu:24.04'
             experimental: false
             suite: default
-          - molecule_distro: 'ubuntu:22.04'
-            experimental: false
-            suite: default
           - molecule_distro: 'debian:12'
-            experimental: false
-            suite: default
-          - molecule_distro: 'debian:11'
             experimental: false
             suite: default
     env:

@@ -25,10 +25,6 @@ jobs:
             version: '24.04'
             suite: default
             experimental: true
-          - distribution: ubuntu
-            version: '22.04'
-            suite: default
-            experimental: false
     env:
       ANSIBLE_CALLBACKS_ENABLED: profile_tasks
       ANSIBLE_EXTRA_VARS: ""
