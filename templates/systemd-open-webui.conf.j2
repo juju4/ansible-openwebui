@@ -1,0 +1,91 @@
+{{ ansible_managed | comment }}
+
+#
+# /etc/systemd/system/open-webui.service
+#
+# Exposure level 3.0
+[Unit]
+Description=Open-webui service
+Requires=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c "{{ openwebui_virtualenv }}/bin/open-webui serve"
+WorkingDirectory={{ openwebui_home }}
+Restart=always
+RestartSec=10
+User={{ openwebui_user }}
+Group={{ openwebui_user }}
+EnvironmentFile=/etc/default/openwebui
+
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=true
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=full
+ProtectProc=ptraceable
+# Error in cpuinfo: failed to parse processor information from /proc/cpuinfo
+ReadOnlyPaths=/proc/cpuinfo
+ProtectKernelTunables=true
+ProtectKernelModules=yes
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictNamespaces=~user mnt
+LockPersonality=true
+RemoveIPC=yes
+
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+IPAccounting=yes
+{% if proxy_url is defined and proxy_url | length > 0 %}
+# upstream communication can be limited to proxy to pull models
+# and internal
+IPAddressAllow=localhost link-local multicast 10.0.0.0/8 192.168.0.0/16
+{% else %}
+# IPAddressAllow=localhost link-local multicast 10.0.0.0/8 192.168.0.0/16
+{% endif %}
+# IPAddressDeny=
+
+CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_DAC_READ_SEARCH
+CapabilityBoundingSet=~CAP_BLOCK_SUSPEND
+CapabilityBoundingSet=~CAP_DAC_* CAP_FOWNER CAP_IPC_OWNER
+CapabilityBoundingSet=~CAP_FSETID CAP_SETFCAP
+CapabilityBoundingSet=~CAP_IPC_LOCK
+CapabilityBoundingSet=~CAP_KILL
+CapabilityBoundingSet=~CAP_LEASE
+CapabilityBoundingSet=~CAP_LINUX_IMMUTABLE
+CapabilityBoundingSet=~CAP_NET_ADMIN
+CapabilityBoundingSet=~CAP_NET_BROADCAST
+CapabilityBoundingSet=~CAP_NET_RAW
+CapabilityBoundingSet=~CAP_SETUID CAP_SETGID CAP_SETPCAP
+CapabilityBoundingSet=~CAP_SETPCAP
+CapabilityBoundingSet=~CAP_SYS_RAWIO
+CapabilityBoundingSet=~CAP_SYS_PTRACE
+CapabilityBoundingSet=~CAP_SYS_NICE CAP_SYS_RESOURCE
+CapabilityBoundingSet=~CAP_SYS_BOOT
+CapabilityBoundingSet=~CAP_SYS_CHROOT
+CapabilityBoundingSet=~CAP_SYS_PACCT
+CapabilityBoundingSet=~CAP_SYS_TTY_CONFIG
+CapabilityBoundingSet=~CAP_SYS_ADMIN
+
+{% if not (ansible_virtualization_type is defined and
+          ansible_virtualization_type == "docker"
+        )
+%}
+SystemCallFilter=@system-service
+SystemCallFilter=~@clock @cpu-emulation @debug @module @mount @obsolete @privileged @raw-io @reboot @resources @swap
+SystemCallArchitectures=native
+# When system call is disallowed, return error code instead of killing process
+SystemCallErrorNumber=EPERM
+{% endif %}
+
+{% if openwebui_cgroups_restriction_enable | bool %}
+CPUWeight={{ openwebui_cgroups_cpushares | default('1024') }}
+CPUQuota={{ openwebui_cgroups_cpuquota | default('80%') }}
+MemoryMax={{ openwebui_cgroups_memorylimit | default('4G') }}
+IOWeight={{ openwebui_cgroups_ioweight | default('80') }}
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

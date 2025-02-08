@@ -1,0 +1,26 @@
+---
+
+- name: Install package dependencies
+  ansible.builtin.package:
+    name: "{{ openwebui_pkg }}"
+    state: "present"
+  register: pkg_result
+  until: pkg_result is success
+
+- name: Install openwebui pip
+  ansible.builtin.pip:
+    name: open-webui
+    version: "{{ openwebui_version }}"
+    virtualenv: "{{ openwebui_virtualenv }}"
+  become: yes
+  become_user: "{{ openwebui_user }}"
+
+- name: Configure openwebui /etc/default
+  ansible.builtin.template:
+    src: "{{ openwebui_env_variables_template }}"
+    dest: "/etc/default/openwebui"
+    mode: '0640'
+    owner: root
+    group: "{{ openwebui_user }}"
+  notify:
+    - Restart openwebui

@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: openwebui
+  author: juju4
+  description: Ansible role to setup [Open-webui](https://github.com/open-webui/open-webui), User-friendly AI Interface.
+  license: BSD
+  min_ansible_version: '2.10'
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+        - bionic
+  galaxy_tags:
+    - web
+    - ai
+    - api
+dependencies: []

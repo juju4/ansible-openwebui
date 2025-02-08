@@ -1,0 +1,46 @@
+{{ ansible_managed | comment }}
+
+# Open-webui settings
+# Note: export is required for shell usage, but not for systemd EnvironmentFile
+# https://docs.openwebui.com/getting-started/env-configuration
+
+ENABLE_SIGNUP={{ openwebui_enable_signup }}
+OLLAMA_BASE_URL={{ openwebui_ollama_base_url }}
+
+{% if openwebui_oauth_signup | bool %}
+# https://docs.openwebui.com/features/sso
+ENABLE_OAUTH_SIGNUP={{ openwebui_oauth_signup }}
+OAUTH_CLIENT_ID={{ openwebui_oauth_client_id }}
+OAUTH_CLIENT_SECRET={{ openwebui_oauth_client_secret }}
+OPENID_PROVIDER_URL={{ openwebui_oauth_provider_url }}
+OAUTH_PROVIDER_NAME={{ openwebui_oauth_provider_name }}
+OAUTH_SCOPES={{ openwebui_oauth_scopes }}
+SSL_CERT_FILE={{ openwebui_ssl_cert_file }}
+
+{% endif %}
+WEBUI_BANNERS='[{"id": "string","type": "string [info, success, warning, error]","title": "string","content": "string","dismissible": False,"timestamp": 1000}]'
+
+GLOBAL_LOG_LEVEL=INFO
+
+# To change for production
+# CORS_ALLOW_ORIGIN='*'
+# localhost or after reverse-proxy?
+CORS_ALLOW_ORIGIN=http://localhost
+
+# WEBUI_URL="http://localhost:3000"
+# No listen/bind variable???
+# https://github.com/open-webui/open-webui/discussions/2879
+# not on https://docs.openwebui.com/getting-started/env-configuration
+HOST=127.0.0.1
+PORT=8080
+
+# WARNI [langchain_community.utils.user_agent] USER_AGENT environment variable not set, consider setting it to identify your requests.
+USER_AGENT="open-webui langchain_community server"
+
+# https://docs.openwebui.com/tutorials/tips/reduce-ram-usage
+RAG_EMBEDDING_ENGINE=ollama
+AUDIO_STT_ENGINE=openai
+
+{% for kv in openwebui_env_extras %}
+{{ kv }}
+{% endfor %}

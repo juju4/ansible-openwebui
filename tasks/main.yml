@@ -1,0 +1,53 @@
+---
+
+- name: Include variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      paths:
+        - 'vars'
+
+- name: Set fact is_container
+  ansible.builtin.set_fact:
+    is_container: true
+  when: >
+    (ansible_virtualization_type is defined and
+      (ansible_virtualization_type == "docker"
+       or ansible_virtualization_type == "containerd"
+       or ansible_virtualization_type == "container"
+      )
+    )
+
+- name: Create openwebui user
+  ansible.builtin.user:
+    name: "{{ openwebui_user }}"
+    home: "{{ openwebui_home }}"
+    comment: "openwebui app user"
+    shell: /bin/bash
+    system: yes
+    groups: "{% if openwebui_setup == 'docker' %}docker{% else %}{{ omit }}{% endif %}"
+    append: yes
+
+- name: Bare setup
+  when:
+    - openwebui_setup == 'bare'
+  block:
+    - name: Import openwebui
+      ansible.builtin.import_tasks: openwebui.yml
+
+    - name: Import systemd
+      ansible.builtin.import_tasks: systemd.yml
+
+- name: Docker setup
+  when:
+    - openwebui_setup == 'docker'
+  block:
+    - name: Import docker-proxy
+      ansible.builtin.import_tasks: docker-proxy.yml
+    - name: Import docker
+      ansible.builtin.import_tasks: docker.yml

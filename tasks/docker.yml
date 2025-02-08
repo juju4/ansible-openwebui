@@ -1,0 +1,33 @@
+---
+
+- name: Install docker setup package dependencies
+  ansible.builtin.package:
+    name: "{{ openwebui_docker_pkg }}"
+    state: "present"
+  register: pkg_result
+  until: pkg_result is success
+
+- name: Pull images - Be patient (~8GB)...
+  community.docker.docker_image:
+    name: "{{ openwebui_docker_image }}"
+    source: pull
+
+- name: Start container
+  community.docker.docker_container:
+    name: open-webui
+    image: "{{ openwebui_docker_image }}"
+    state: started
+    restart: yes
+    volumes:
+      # - "ollama:/root/.ollama"
+      # - "open-webui:/app/backend/data"
+      - "{{ openwebui_home }}/ollama:/root/.ollama"
+      - "{{ openwebui_home }}/data:/app/backend/data"
+    ports:
+      - "8080:8080"
+    env: "{{ openwebui_docker_env | default(omit) }}"
+  register: output
+
+- name: Show results
+  ansible.builtin.debug:
+    var: output

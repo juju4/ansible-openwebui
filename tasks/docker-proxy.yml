@@ -1,0 +1,41 @@
+---
+
+- name: Proxy
+  when:
+    - proxy_env != None
+    - proxy_env|length > 0
+  block:
+    - name: Ensure /etc/systemd/system/docker.service.d directory exists
+      ansible.builtin.file:
+        path: /etc/systemd/system/docker.service.d
+        mode: '0755'
+        owner: root
+        state: directory
+    - name: Add docker daemon proxy configuration
+      ansible.builtin.copy:
+        content: |
+          [Service]
+          Environment="HTTP_PROXY={{ proxy_url }}"
+          Environment="HTTPS_PROXY={{ proxy_url }}"
+        dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+        mode: '0644'
+        owner: root
+      notify:
+        - Reload systemd
+        - Restart docker
+    - name: Ensure .docker directory exists
+      ansible.builtin.file:
+        path: "{{ openwebui_home }}/.docker"
+        mode: '0700'
+        owner: "{{ openwebui_user }}"
+        state: directory
+    - name: Add docker cli proxy configuration
+      ansible.builtin.template:
+        src: docker-config.json.j2
+        dest: "{{ openwebui_home }}/.docker/config.json"
+        mode: '0600'
+        owner: "{{ openwebui_user }}"
+      become: yes
+      become_user: "{{ openwebui_user }}"
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers

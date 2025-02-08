@@ -1,0 +1,24 @@
+---
+
+- name: Ensure systemd folder exists
+  ansible.builtin.file:
+    dest: /etc/systemd/system
+    state: directory
+    mode: '0755'
+
+- name: Ensure systemd unit files are configured
+  ansible.builtin.template:
+    src: "systemd-open-webui.conf.j2"
+    dest: "/etc/systemd/system/open-webui.service"
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart openwebui
+
+- name: Ensure services are enabled and started
+  ansible.builtin.service:
+    name: open-webui
+    state: started
+    enabled: yes
+  when:
+    - not is_container|bool

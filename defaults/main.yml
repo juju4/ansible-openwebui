@@ -1,0 +1,40 @@
+---
+
+openwebui_setup: bare
+# openwebui_setup: docker
+
+openwebui_version: 0.5.9
+openwebui_user: _openwebui
+openwebui_home: /var/_openwebui
+# openwebui_root: "{{ openwebui_home }}/openwebui"
+openwebui_virtualenv: "{{ openwebui_home }}/env-openwebui"
+
+openwebui_env_variables_template: "default-env.j2"
+openwebui_env_extras: []
+
+openwebui_ollama_base_url: http://localhost:11434
+
+openwebui_oauth_signup: false
+openwebui_oauth_client_id:
+openwebui_oauth_client_secret:
+openwebui_oauth_provider_url:
+openwebui_oauth_provider_name:
+openwebui_oauth_scopes: email
+openwebui_ssl_cert_file: /etc/ssl/certs/ca-certificates.crt
+
+openwebui_enable_signup: true
+
+openwebui_cgroups_restriction_enable: true
+
+proxy_url:
+# proxy_url: http://192.168.1.2:3128
+
+openwebui_docker_image: ghcr.io/open-webui/open-webui:ollama
+# ghcr.io/open-webui/open-webui:main
+# ghcr.io/open-webui/open-webui:cuda
+proxy_env:
+# proxy_env:
+#   http_proxy: "{{ proxy_url }}"
+#   https_proxy: "{{ proxy_url }}"
+
+is_container: false
