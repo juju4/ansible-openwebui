@@ -40,6 +40,8 @@ jobs:
           ansible --version
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE
           [ -f molecule/${SUITE}/requirements.yml ] && ansible-galaxy install -r molecule/${SUITE}/requirements.yml
+          [ -f molecule/default-nginx/requirements.yml ] && ansible-galaxy install -r molecule/default-nginx/requirements.yml
+          [ -f molecule/default-docker/requirements.yml ] && ansible-galaxy install -r molecule/default-docker/requirements.yml
           { echo '[defaults]'; echo 'callbacks_enabled = profile_tasks, timer'; echo 'roles_path = ../:/home/runner/.ansible/roles'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
       - name: Fetch central settings repository
         run: |
