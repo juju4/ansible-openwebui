@@ -137,3 +137,10 @@ jobs:
           sudo journalctl -u openwebui -l --no-pager
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - docker
+        run: |
+          set -x
+          sudo docker image ls
+          sudo docker container ls
+        if: ${{ always() }}
+        continue-on-error: true
