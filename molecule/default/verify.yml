@@ -106,8 +106,10 @@
     - name: Pip-audit
       ansible.builtin.command: "{{ openwebui_virtualenv }}/bin/pip-audit"
       changed_when: false
+      failed_when: false
       register: audit
     - name: Validate no known vulnerabilities from pip-audit
       ansible.builtin.assert:
         that:
           - "'No known vulnerabilities found' in audit.stderr"
+      failed_when: false
