@@ -3,7 +3,7 @@
 openwebui_setup: bare
 # openwebui_setup: docker
 
-openwebui_version: 0.5.9
+openwebui_version: 0.6.5
 openwebui_user: _openwebui
 openwebui_home: /var/_openwebui
 # openwebui_root: "{{ openwebui_home }}/openwebui"
