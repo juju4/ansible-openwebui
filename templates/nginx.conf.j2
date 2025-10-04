@@ -19,6 +19,9 @@ server {
 
     access_log /var/log/nginx/openwebui.access.log;
     error_log /var/log/nginx/openwebui.error.log;
+{% if hardenwebserver_nginx_with_log_json is defined and hardenwebserver_nginx_with_log_json | bool %}
+    access_log /var/log/nginx/access_json.log combined_json;
+{% endif %}
 
     server_tokens off;
     etag off;
