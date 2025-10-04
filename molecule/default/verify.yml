@@ -19,6 +19,7 @@
           - procps-ng
           - bind-utils
         state: present
+      become: yes
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
     - name: Debian | Ensure ps and host present
       ansible.builtin.package:
@@ -26,6 +27,7 @@
           - procps
           - dnsutils
         state: present
+      become: yes
       when: ansible_os_family == "Debian"
     - name: Debug | var ansible_virtualization_type
       ansible.builtin.debug:
