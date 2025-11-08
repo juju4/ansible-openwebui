@@ -3,7 +3,9 @@
 openwebui_setup: bare
 # openwebui_setup: docker
 
-openwebui_version: 0.6.5
+# renovate: datasource=github-releases depName=open-webui/open-webui
+openwebui_github_version: v0.6.5
+openwebui_version: "{{ openwebui_github_version | regex_replace('^v', '') }}"
 openwebui_user: _openwebui
 openwebui_home: /var/_openwebui
 # openwebui_root: "{{ openwebui_home }}/openwebui"
