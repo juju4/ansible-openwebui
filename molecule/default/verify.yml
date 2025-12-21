@@ -5,7 +5,7 @@
   vars:
     openwebui_virtualenv: /var/_openwebui/env-openwebui
     exec_file: "{{ openwebui_virtualenv }}/bin/open-webui"
-    exec_mode: '0775'
+    exec_mode: '0755'
     processes:
       - { u: _openwebui, p: python }
     ports:
@@ -42,10 +42,10 @@
            or ansible_virtualization_type == "container"
           )
         )
-    - name: Debian | Set fact
+    - name: Ubuntu | Set fact
       ansible.builtin.set_fact:
-        exec_mode: '0755'
-      when: ansible_distribution == "Debian"
+        exec_mode: '0775'
+      when: ansible_distribution == "Ubuntu"
   tasks:
     - name: Check executable
       ansible.builtin.stat:
