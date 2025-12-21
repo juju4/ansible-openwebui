@@ -7,6 +7,11 @@ on:
   workflow_dispatch:
   schedule:  # run weekly, every Tuesday 02:00
     - cron: '0 2 * * 2'
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 permissions: {}
 
@@ -22,10 +27,13 @@ jobs:
       max-parallel: 4
       matrix:
         include:
+          - molecule_distro: 'almalinux:10-kitten'
+            experimental: false
+            suite: default
           - molecule_distro: 'ubuntu:24.04'
             experimental: false
             suite: default
-          - molecule_distro: 'debian:12'
+          - molecule_distro: 'debian:13'
             experimental: false
             suite: default
     env:
@@ -51,13 +59,16 @@ jobs:
             /var/lib/apt
             /var/_install
             /var/_openwebui/env-openwebui
+            /home/runner/.ansible
+            /home/runner/.cache/molecule
           key: cache-ansible-openwebui-${{ steps.get-date.outputs.date }}
       - name: Install dependencies
         run: |
+          set -x
           python -m pip install --upgrade pip
           pip install molecule molecule-plugins docker ansible-lint flake8 testinfra ansible
           mkdir -p $HOME/.ansible/roles && ln -s $GITHUB_WORKSPACE/$ANSIBLE_ROLE $HOME/.ansible/roles/ || true
-          [ -f molecule/${SUITE}/requirements.yml ] && ansible-galaxy install -r molecule/${SUITE}/requirements.yml || true
+          [ -f molecule/${ANSIBLE_SUITE}/requirements.yml ] && ansible-galaxy install -r molecule/${ANSIBLE_SUITE}/requirements.yml || true
       - name: Fetch central settings repository
         run: |
           export settings_repo="https://raw.githubusercontent.com/juju4/ansible-ci-settings/main"
@@ -77,7 +88,7 @@ jobs:
           ansible-galaxy role list || true
           pwd
           env
-          find -ls
+          find . -ls
       - name: Cleaning
         run: |
           set -x
