@@ -1,16 +1,14 @@
 ---
-name: default-bare
+name: default-bare-monthly
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
-  schedule:  # run weekly, every Thursday
-    - cron: '40 2 * * 4'
+  schedule:  # run on the 12th of the month at 01:00 UTC
+    - cron: '0 1 12 * *'
   merge_group:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id  }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 permissions: {}
@@ -23,9 +21,17 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         include:
+          - distribution: ubuntu
+            version: '24.04'
+            suite: default
+            experimental: true
+          - distribution: ubuntu
+            version: '24.04'
+            suite: default-nginx
+            experimental: true
           - distribution: ubuntu
             version: '24.04'
             suite: default-docker
