@@ -53,6 +53,10 @@ $ MOLECULE_DISTRO=ubuntu:24.04 molecule test --destroy=never
 
 * Pending PRs: [feat: add audit logging feature #8509](https://github.com/open-webui/open-webui/pull/8509)
 
+## Resources
+
+* <https://github.com/riosengineer/open-webui-on-azure>
+
 ## License
 
 BSD 2-clause
