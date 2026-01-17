@@ -20,7 +20,7 @@
           - bind-utils
         state: present
       become: yes
-      when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+      when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] | int >= 8
     - name: Debian | Ensure ps and host present
       ansible.builtin.package:
         name:
@@ -28,24 +28,24 @@
           - dnsutils
         state: present
       become: yes
-      when: ansible_os_family == "Debian"
-    - name: Debug | var ansible_virtualization_type
+      when: ansible_facts['os_family'] == "Debian"
+    - name: Debug | var ansible_facts['virtualization_type']
       ansible.builtin.debug:
-        var: ansible_virtualization_type
+        var: ansible_facts['virtualization_type']
     - name: Set fact is_container
       ansible.builtin.set_fact:
         is_container: true
       when: >
-        (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "docker"
-           or ansible_virtualization_type == "containerd"
-           or ansible_virtualization_type == "container"
+        (ansible_facts['virtualization_type'] is defined and
+          (ansible_facts['virtualization_type'] == "docker"
+           or ansible_facts['virtualization_type'] == "containerd"
+           or ansible_facts['virtualization_type'] == "container"
           )
         )
     - name: Ubuntu | Set fact
       ansible.builtin.set_fact:
         exec_mode: '0775'
-      when: ansible_distribution == "Ubuntu"
+      when: ansible_facts['distribution'] == "Ubuntu"
   tasks:
     - name: Check executable
       ansible.builtin.stat:
