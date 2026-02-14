@@ -55,7 +55,7 @@ $ MOLECULE_DISTRO=ubuntu:24.04 molecule test --destroy=never
 
 ## Resources
 
-* <https://github.com/riosengineer/open-webui-on-azure>
+* [Open WebUI On Azure: Part 2 – API Management ❤️ AI, Jan 2026](https://rios.engineer/open-webui-on-azure-part-2-api-management-ai/), <https://github.com/riosengineer/open-webui-on-azure>
 
 ## License
 
