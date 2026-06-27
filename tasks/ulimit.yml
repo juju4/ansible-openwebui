@@ -1,0 +1,8 @@
+---
+
+- name: Increase open files in ulimit
+  community.general.pam_limits:
+    domain: "{{ openwebui_user }}"
+    limit_type: '-'
+    limit_item: nofile
+    value: "{{ openwebui_ulimit_nofile }}"

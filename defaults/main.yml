@@ -39,4 +39,6 @@ proxy_env:
 #   http_proxy: "{{ proxy_url }}"
 #   https_proxy: "{{ proxy_url }}"
 
+openwebui_ulimit_nofile: 64000
+
 is_container: false
