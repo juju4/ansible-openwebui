@@ -19,7 +19,6 @@ OAUTH_SCOPES={{ openwebui_oauth_scopes }}
 SSL_CERT_FILE={{ openwebui_ssl_cert_file }}
 
 {% endif %}
-WEBUI_BANNERS='[{"id": "string","type": "string [info, success, warning, error]","title": "string","content": "string","dismissible": False,"timestamp": 1000}]'
 
 GLOBAL_LOG_LEVEL=INFO
 
@@ -37,10 +36,6 @@ PORT=8080
 
 # WARNI [langchain_community.utils.user_agent] USER_AGENT environment variable not set, consider setting it to identify your requests.
 USER_AGENT="open-webui langchain_community server"
-
-# https://docs.openwebui.com/tutorials/tips/reduce-ram-usage
-RAG_EMBEDDING_ENGINE=ollama
-AUDIO_STT_ENGINE=openai
 
 {% for kv in openwebui_env_extras %}
 {{ kv }}
