@@ -40,7 +40,7 @@
   tasks:
     - name: Ensure processes are running
       ansible.builtin.command:
-        cmd: "pgrep -u {{ item.u }} {{ item.p }}"
+        cmd: "pgrep -u {{ item.u }} -f {{ item.p }}"
       register: ps
       changed_when: false
       failed_when: false
