@@ -17,6 +17,9 @@ RestartSec=10
 User={{ openwebui_user }}
 Group={{ openwebui_user }}
 EnvironmentFile=/etc/default/openwebui
+{% if openwebui_webproxy_env_enable | bool %}
+EnvironmentFile={{ openwebui_webproxy_env_file }}
+{% endif %}
 
 # Hardening
 NoNewPrivileges=yes

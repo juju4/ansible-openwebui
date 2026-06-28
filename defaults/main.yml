@@ -29,17 +29,22 @@ openwebui_auth: true
 
 openwebui_cgroups_restriction_enable: true
 
-proxy_url:
-# proxy_url: http://192.168.1.2:3128
-
 openwebui_docker_image: ghcr.io/open-webui/open-webui:ollama
 # ghcr.io/open-webui/open-webui:main
 # ghcr.io/open-webui/open-webui:cuda
+
+openwebui_ulimit_nofile: 64000
+
+# for play
+proxy_url:
+# proxy_url: http://192.168.1.2:3128
 proxy_env:
 # proxy_env:
 #   http_proxy: "{{ proxy_url }}"
 #   https_proxy: "{{ proxy_url }}"
-
-openwebui_ulimit_nofile: 64000
+# for systemd
+openwebui_webproxy_env_enable: false
+openwebui_webproxy_env_file: /etc/environment
+openwebui_webproxy_env_content: ''
 
 is_container: false
