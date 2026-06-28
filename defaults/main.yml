@@ -25,6 +25,7 @@ openwebui_oauth_scopes: email
 openwebui_ssl_cert_file: /etc/ssl/certs/ca-certificates.crt
 
 openwebui_enable_signup: true
+openwebui_auth: true
 
 openwebui_cgroups_restriction_enable: true
 
