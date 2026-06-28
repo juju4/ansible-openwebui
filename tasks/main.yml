@@ -32,7 +32,7 @@
     shell: /bin/bash
     system: yes
     groups: "{% if openwebui_setup == 'docker' %}docker{% else %}{{ omit }}{% endif %}"
-    append: yes
+    append: "{% if openwebui_setup == 'docker' %}true{% else %}{{ omit }}{% endif %}"
 
 - name: Import ulimit
   ansible.builtin.import_tasks: ulimit.yml
