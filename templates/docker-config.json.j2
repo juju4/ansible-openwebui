@@ -1,0 +1,17 @@
+{
+ "default-ulimits": {
+   "nofile": {
+     "name": "nofile",
+     "soft": {{ openwebui_ulimit_nofile }},
+     "hard": {{ openwebui_ulimit_nofile }}
+   }
+ }{% if proxy_env != None and proxy_env | length > 0 %},
+ "proxies": {
+   "default": {
+     "httpProxy": "{{ proxy_url }}",
+     "httpsProxy": "{{ proxy_url }}",
+     "noProxy": "{{ no_proxy | default('127.0.0.1,::1,localhost,10.0.0.0/8,192.168.0.0/16') }}"
+   }
+ }
+{% endif %}
+}

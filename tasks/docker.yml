@@ -1,5 +1,14 @@
 ---
 
+- name: Add docker cli configuration
+  ansible.builtin.template:
+    src: docker-config.json.j2
+    dest: "{{ openwebui_home }}/.docker/config.json"
+    mode: '0600'
+    owner: "{{ openwebui_user }}"
+  become: yes
+  become_user: "{{ openwebui_user }}"
+
 - name: Install docker setup package dependencies
   ansible.builtin.package:
     name: "{{ openwebui_docker_pkg }}"
