@@ -23,11 +23,5 @@
       notify:
         - Reload systemd
         - Restart docker
-    - name: Ensure .docker directory exists
-      ansible.builtin.file:
-        path: "{{ openwebui_home }}/.docker"
-        mode: '0700'
-        owner: "{{ openwebui_user }}"
-        state: directory
     - name: Flush handlers
       ansible.builtin.meta: flush_handlers

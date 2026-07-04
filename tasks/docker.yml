@@ -1,5 +1,12 @@
 ---
 
+- name: Ensure .docker directory exists
+  ansible.builtin.file:
+    path: "{{ openwebui_home }}/.docker"
+    mode: '0700'
+    owner: "{{ openwebui_user }}"
+    state: directory
+
 - name: Add docker cli configuration
   ansible.builtin.template:
     src: docker-config.json.j2
