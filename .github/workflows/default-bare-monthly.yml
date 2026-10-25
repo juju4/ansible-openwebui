@@ -25,15 +25,15 @@ jobs:
       matrix:
         include:
           - distribution: ubuntu
-            version: '24.04'
+            version: '26.04'
             suite: default
             experimental: true
           - distribution: ubuntu
-            version: '24.04'
+            version: '26.04'
             suite: default-nginx
             experimental: true
           - distribution: ubuntu
-            version: '24.04'
+            version: '26.04'
             suite: default-docker
             experimental: false
     env:
